@@ -24,35 +24,42 @@ class Kategori_produk extends Controller
     public function tambah(Request $request)
     {
     	if(Session()->get('username')=="") { return redirect('login')->with(['warning' => 'Mohon maaf, Anda belum login']);}
-    	request()->validate([
-					        'nama_kategori_produk' => 'required|unique:kategori_produk',
-					        'urutan' 		       => 'required',
-                            'gambar'               => 'required|file|image|mimes:jpeg,png,jpg|max:2048',
-					        ]);
-        // UPLOAD START
-        $image                  = $request->file('gambar');
-        $filenamewithextension  = $request->file('gambar')->getClientOriginalName();
-        $filename               = pathinfo($filenamewithextension, PATHINFO_FILENAME);
-        $input['nama_file']     = str_slug($filename, '-').'-'.time().'.'.$image->getClientOriginalExtension();
-        $destinationPath        = public_path('upload/image/thumbs/');
-        $img = Image::make($image->getRealPath(),array(
+
+        $validator = \Validator::make($request->all(), [
+            'nama_kategori_produk' => 'required|unique:kategori_produk',
+			'urutan' 		       => 'required',
+            'gambar'               => 'required|file|image|mimes:jpeg,png,jpg|max:2048',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect('admin/kategori_produk')->with(['warning' => 'Nama kategori sudah digunakan']);
+
+        } else {
+            // UPLOAD START
+            $image                  = $request->file('gambar');
+            $filenamewithextension  = $request->file('gambar')->getClientOriginalName();
+            $filename               = pathinfo($filenamewithextension, PATHINFO_FILENAME);
+            $input['nama_file']     = str_slug($filename, '-').'-'.time().'.'.$image->getClientOriginalExtension();
+            $destinationPath        = public_path('upload/image/thumbs/');
+            $img = Image::make($image->getRealPath(), array(
             'width'     => 150,
             'height'    => 150,
             'grayscale' => false
-        ));
-        $img->save($destinationPath.'/'.$input['nama_file']);
-        $destinationPath = public_path('upload/image/');
-        $image->move($destinationPath, $input['nama_file']);
-        // END UPLOAD
-    	$slug_kategori_produk = str_slug($request->nama_kategori_produk, '-');
-        DB::table('kategori_produk')->insert([
+                ));
+            $img->save($destinationPath.'/'.$input['nama_file']);
+            $destinationPath = public_path('upload/image/');
+            $image->move($destinationPath, $input['nama_file']);
+            // END UPLOAD
+            $slug_kategori_produk = str_slug($request->nama_kategori_produk, '-');
+            DB::table('kategori_produk')->insert([
             'nama_kategori_produk'  => $request->nama_kategori_produk,
             'slug_kategori_produk'	=> $slug_kategori_produk,
             'urutan'   		        => $request->urutan,
             'keterangan'            => $request->keterangan,
             'gambar'                => $input['nama_file']
-        ]);
-        return redirect('admin/kategori_produk')->with(['sukses' => 'Data telah ditambah']);
+                ]);
+            return redirect('admin/kategori_produk')->with(['sukses' => 'Data telah ditambah']);
+        }
     }
 
     // edit

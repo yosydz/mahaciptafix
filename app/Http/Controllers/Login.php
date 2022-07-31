@@ -3,6 +3,7 @@ namespace App\Http\Controllers;
 use App\User_model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Database\QueryException;
 
 class Login extends Controller
 {
@@ -26,7 +27,20 @@ class Login extends Controller
 
     public function proses_register(Request $request)
     {
-        $tambah = DB::table('users')->insert([
+
+      $profile = request()->all();
+// dd($profile->()id);
+        $rules    = [
+                'username'                       => 'required|unique:users,username',
+                'email'                      => 'required|email|unique:users,email'
+        ];
+
+        $validator = \Validator::make($profile, $rules);
+        if ($validator->fails()) {
+            return redirect('login/register')->with(['warning' => 'Username / email telah digunakan']);
+
+        } else {
+           $tambah = DB::table('users')->insert([
             'nama'              => $request->nama,
             'email'             => $request->email,
             'username'          => $request->username,
@@ -35,6 +49,10 @@ class Login extends Controller
             'gambar'            => 'testimonials-1.jpg',
             'tanggal'           => date('Y-m-d H:i:s')
         ]);
+        }
+
+
+
 
         return redirect('/login')->with(['sukses' => 'Data telah ditambah']);
     }
