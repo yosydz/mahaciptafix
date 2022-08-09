@@ -158,6 +158,7 @@ class Produk extends Controller
                             'nama_produk'   => 'required|unique:produk',
                             'kode_produk'   => 'required|unique:produk',
                             'isi'           => 'required',
+                            'harga_jual'    => 'required',
                             ]);
 
         $slug_nama_produk = str_slug($request->nama_produk, '-');

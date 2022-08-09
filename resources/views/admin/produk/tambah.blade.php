@@ -96,9 +96,10 @@
     </div>
 
     <div class="form-group row">
-        <label class="col-sm-3 control-label text-right">Harga Produk</label>
+        <label class="col-sm-3 control-label text-right">Harga Produk<span
+                class="text-danger">*</span></label>
         <div class="col-sm-3">
-            <input type="number" name="harga_jual" class="form-control" placeholder="Harga"
+            <input type="number" required name="harga_jual" class="form-control" placeholder="Harga"
                 value="{{ old('harga_jual') }}">
             <small class="text-gray">Harga</small>
         </div>

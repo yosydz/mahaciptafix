@@ -26,29 +26,29 @@
                 <div class="row">
                   <a class="button secondary url col-lg-3 col-md-3 col-sm-3 col-xs-3 url" href="#zero">
                     <img src="{{ asset('public/upload/image/thumbs/'.$produk->gambar) }}" alt="<?php echo $produk->nama_produk; ?>" class="img img-thumbnail img-fluid" >
-                  </a> 
+                  </a>
                   <?php if($gambar2) { foreach($gambar2 as $gambar) { ?>
                   <a class="button secondary col-lg-3 col-md-3 col-sm-3 col-xs-3 url" href="#one<?php echo $gambar->id_gambar_produk ?>">
                     <img src="{{ asset('public//upload/image/thumbs/'.$gambar->gambar) }}" alt="<?php echo $produk->nama_produk; ?>" class="img img-thumbnail img-fluid" >
-                  </a> 
+                  </a>
                   <?php }} ?>
                 </div>
-                
+
             </div>
 
             <div class="col-lg-8 col-md-7 col-sm-12 produk">
-              
+
               <h1><?php echo $title ?></h1>
-              <h5>Rp 
-                <span class="harga"><?php 
-                $date1    = strtotime($produk->mulai_diskon); 
-                $date2    = strtotime($produk->selesai_diskon); 
+              <h5>Rp
+                <span class="harga"><?php
+                $date1    = strtotime($produk->mulai_diskon);
+                $date2    = strtotime($produk->selesai_diskon);
                 $sekarang = strtotime(date('Y-m-d'));
                 if($date1 <= $sekarang && $date2 >= $sekarang) { ?>
-                  <strong><?php echo number_format($produk->harga_jual,'0',',','.'); ?> 
+                  <strong><?php echo number_format($produk->harga_jual,'0',',','.'); ?>
                     <sup class="text-danger">
                       <del>
-                        Rp <?php echo number_format($produk->harga_jual,'0',',','.'); ?>    
+                        Rp <?php echo number_format($produk->harga_jual,'0',',','.'); ?>
                       </del>
                     </sup>
                   </strong>
@@ -58,15 +58,13 @@
                 </span>
               </h5>
               <hr>
-                <p><strong>Jumlah:</strong>
                   {{-- <br>{{  echo $produk->ukuran; }} | Satuan: {{  echo $produk->berat; }} gram --}}
                 </p>
                 {{-- <hr> --}}
-                <div class="input-group">                  
-                  <input type="number" name="quantity" id="<?php echo $produk->id_produk;?>" class="quantity form-control col-md-2" min="<?php echo $produk->jumlah_order_min ?>" max="<?php echo $produk->jumlah_order_max ?>" value="1" required>
+                <div class="input-group">
 
                   <span class="input-group-btn">
-                    
+
                       <a href="{{ asset('pemesanan?id_produk='.$produk->id_produk) }}" class="btn btn-info">
                         <i class="fa fa-shopping-cart"></i> Pesan Produk Ini
                       </a>
@@ -82,7 +80,7 @@
               <hr>
               <h3>Produk <?php echo $kategori_produk->nama_kategori_produk ?> lainnya</h3>
               <hr>
-              
+
             </div>
             <?php  }
             if($produk_all) {

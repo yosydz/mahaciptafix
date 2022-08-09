@@ -126,6 +126,8 @@ class Home extends Controller
         $model  = new Produk_model();
         // insert data ke table pegawai
         $produk = $model->detail($request->id_produk);
+// dd($produk->stok);
+        $stok = $produk->stok;
         $pesan  = new Pemesanan_model();
         $check  = $pesan->nomor_akhir();
         if ($check) {
@@ -146,6 +148,10 @@ class Home extends Controller
         $kd_tansaksi        = 'MHC' . rand(0, 1000) . '/' . $kode_transaksi;
         $token_transaksi    = Str::random(32);
 
+        $penguranganStok = $stok - $request->jumlah_produk;
+
+
+
         $data = [
             'id_produk' => $request->id_produk,
             'id_user' => session()->get('id_user'),
@@ -165,10 +171,20 @@ class Home extends Controller
             'tanggal_post' => date('Y-m-d H:i:s')
         ];
 
-        DB::table('pemesanan')->insert($data);
-        // alihkan halaman ke halaman pegawai
-        return redirect('berhasil/' . $token_transaksi);
-        // End proses
+
+        if($penguranganStok < 0){
+            return redirect('pemesanan')->with(['warning' => ' Jumlah stok hanya tersisa '. $stok]);
+        }else{
+            DB::table('pemesanan')->insert($data);
+            $result = DB::table('produk')
+            ->where('id_produk', $request->id_produk)
+            ->update(['stok' => $penguranganStok]);
+
+
+
+            return redirect('berhasil/' . $token_transaksi);
+
+        }
     }
 
     public function generatePaymentGateway($data)

@@ -39,6 +39,7 @@ class Produk_model extends Model
     	$query = DB::table('produk')
             ->join('kategori_produk', 'kategori_produk.id_kategori_produk', '=', 'produk.id_kategori_produk','LEFT')
             ->select('produk.*', 'kategori_produk.slug_kategori_produk', 'kategori_produk.nama_kategori_produk')
+            ->where('stok', '>', 0)
             ->where('tanggal_end', '>', date("Y-m-d"))
             ->where('status_produk','Publish')
             ->orderBy('id_produk','DESC')
@@ -116,6 +117,7 @@ class Produk_model extends Model
         $query = DB::table('produk')
             ->join('kategori_produk', 'kategori_produk.id_kategori_produk', '=', 'produk.id_kategori_produk','LEFT')
             ->select('produk.*', 'kategori_produk.slug_kategori_produk', 'kategori_produk.nama_kategori_produk')
+            ->where('stok', '>', 0)
             ->where('tanggal_end', '>', date("Y-m-d"))
             ->where(array(  'produk.status_produk'                  => 'Publish',
                             'kategori_produk.slug_kategori_produk'  => $slug_kategori_produk))

@@ -62,7 +62,7 @@
             <div class="form-group row">
               <label class="col-sm-4 control-label text-right">Jumlah <span class="text-danger">*</span></label>
               <div class="col-sm-8">
-                <input type="number" name="jumlah_produk" class="form-control" value="{{ old('jumlah_produk') }}"  placeholder="Jumlah" min="1" max="5" required>
+                <input type="number" name="jumlah_produk" class="form-control" value="{{ old('jumlah_produk') }}"  placeholder="Jumlah" min="1" required>
               </div>
             </div>
 
@@ -135,4 +135,9 @@
     minDate: "{{ $start }}"
   });
 });
+
+@if ($message = Session::get('warning'))
+// Notifikasi
+swal ( "Mohon maaf" ,  "<?php echo $message ?>" ,  "warning" )
+@endif
 </script>
